@@ -9,6 +9,7 @@ import 'package:expense1/Screens/global.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:expense1/loading.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
   String error = '';
   bool load = true;
-
+  final storage = FlutterSecureStorage();
   void initState() {
     super.initState();
     func();
@@ -65,7 +66,8 @@ class _HomeState extends State<Home> {
                 icon: Icon(Icons.power_settings_new_rounded),
                 color: Colors.black,
                 iconSize: 55,
-                onPressed: () {
+                onPressed: ()async {
+                  await storage.write(key: 'user', value: '');
                   setState(() {
                     user = '';
                   });
@@ -89,6 +91,9 @@ class _HomeState extends State<Home> {
                             (info) => ExpCard(
                               info: info,
                               onDelete: () async {
+                                setState(() {
+                                  load=true;
+                                });
                                 String? result = await _auth.delete(
                                   info.id!,
                                   user,
@@ -98,18 +103,23 @@ class _HomeState extends State<Home> {
                                     expenses.removeWhere(
                                       (e) => e.id == info.id,
                                     );
+                                    load=false;
                                   });
                                 }
                               },
                               onEdit: ()async{
                                 setState(() {
                                   objid=info.id!;
+                                  load=true;
                                 });
                                 await Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => update(info:info)),
                                 );
                                 await func();
+                                setState(() {
+                                  load=false;
+                                });
                               },
                             ),
                           )
@@ -127,11 +137,16 @@ class _HomeState extends State<Home> {
                       elevation: 0.0,
                       backgroundColor: Colors.black,
                       onPressed: () async {
+                        setState(() {
+                          load=true;
+                        });
                         await Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Add()),
                         );
+                        await func();
                         setState(() {
+                          load=false;
                         });
                       },
                       child: Icon(Icons.add, color: Colors.white, size: 50),

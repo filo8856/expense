@@ -3,7 +3,7 @@ import 'package:expense1/Screens/card_class.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  final String baseUrl = 'http://192.168.29.196:3000/api'; // use IP if on real device
+  final String baseUrl = 'https://expense-backend1.onrender.com/api'; // use IP if on real device
 
   Future<String?> register(String userId, String password) async {
     try {

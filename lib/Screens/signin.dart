@@ -4,6 +4,7 @@ import 'package:expense1/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:expense1/Screens/auth.dart';
 import 'package:expense1/Screens/global.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggle;
@@ -16,6 +17,7 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
+  final storage = FlutterSecureStorage();
   bool load = false;
   String userid = '';
   String pass = '';
@@ -173,9 +175,10 @@ class _SignInState extends State<SignIn> {
                         }
                         else
                         {
-                          setState((){
-                            user=userid;
-                          });
+                          user=userid;
+                          print("Writing to storage");
+                          await storage.write(key: 'user', value: userid);
+                          print("Navigating to Home");
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) => Home()),

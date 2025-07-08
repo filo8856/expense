@@ -3,6 +3,7 @@ import 'package:expense1/Screens/global.dart';
 import 'package:expense1/Screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:expense1/loading.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Register extends StatefulWidget {
   final Function toggle;
@@ -16,6 +17,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formkey = GlobalKey<FormState>();
+  final storage = FlutterSecureStorage();
   bool load = false;
   String userid = '';
   String pass = '';
@@ -172,6 +174,7 @@ class _RegisterState extends State<Register> {
                         }
                         else
                           {
+                            await storage.write(key: 'user', value: userid);
                             setState(() {
                               user=userid;
                             });
