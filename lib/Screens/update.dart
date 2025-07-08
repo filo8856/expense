@@ -9,7 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class update extends StatefulWidget {
-  const update({super.key});
+  final Exp info;
+  update({super.key, required this.info});
 
   @override
   State<update> createState() => _updateState();
@@ -44,16 +45,28 @@ class _updateState extends State<update> {
     }
   }
   String? selectCat;
-  String formCat = '';
-  String formDesc = '';
+  String? formCat;
+  String formDesc='';
   String id = '';
   double formAmount = 0.0;
   String error = '';
   TextEditingController formDate = TextEditingController();
+  TextEditingController descController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
   bool load = false;
 
   @override
+  void initState() {
+    super.initState();
+    selectCat = widget.info.cat;
+    formCat=selectCat;
+    descController.text = widget.info.desc ?? '';
+    formDesc=widget.info.desc!;
+    formAmount=widget.info.amount;
+    amountController.text=formAmount.toString();
+    formDate.text = DateFormat('dd.MM.yy').format(widget.info.date);
+  }
   Widget build(BuildContext context) {
     return load
         ? Loading()
@@ -92,7 +105,7 @@ class _updateState extends State<update> {
             color: Colors.black,
             iconSize: 55,
             onPressed: () async{
-              String? result=await _auth.edit(formDesc, formCat,formAmount, DateFormat('dd.MM.yy').parse(formDate.text), user,objid);
+              String? result=await _auth.edit(formDesc, formCat!,formAmount, DateFormat('dd.MM.yy').parse(formDate.text), user,objid);
               if(result!=null)
                 setState(() {
                   error='Couldnt create';
@@ -150,7 +163,7 @@ class _updateState extends State<update> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          prefixIcon: _getCategoryIcon(formCat),
+                          prefixIcon: _getCategoryIcon(formCat!),
                           labelText: 'Category',
                           labelStyle: TextStyle(
                             fontSize: 20,
@@ -228,6 +241,7 @@ class _updateState extends State<update> {
                 ),
                 SizedBox(height: 40),
                 TextFormField(
+                  controller: descController,
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.black,
@@ -265,6 +279,7 @@ class _updateState extends State<update> {
                 ),
                 SizedBox(height: 40),
                 TextFormField(
+                  controller:amountController,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
                   ],

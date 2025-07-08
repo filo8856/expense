@@ -107,7 +107,7 @@ class _HomeState extends State<Home> {
                                 });
                                 await Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => update()),
+                                  MaterialPageRoute(builder: (context) => update(info:info)),
                                 );
                                 await func();
                               },
