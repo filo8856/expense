@@ -1,0 +1,2 @@
+C:/Expense1/android/app/.cxx/RelWithDebInfo/492p144i/x86/CMakeFiles/edit_cache.dir
+C:/Expense1/android/app/.cxx/RelWithDebInfo/492p144i/x86/CMakeFiles/rebuild_cache.dir
