@@ -1,4 +1,5 @@
 import 'package:expense1/Screens/add.dart';
+import 'package:expense1/Screens/chart.dart';
 import 'package:expense1/Screens/update.dart';
 import 'package:expense1/Screens/auth.dart';
 import 'package:expense1/Screens/expenselist.dart';
@@ -21,6 +22,13 @@ class _HomeState extends State<Home> {
   String error = '';
   bool load = true;
   final storage = FlutterSecureStorage();
+  double calculateMonthlyTotal(List<Exp> expenses) {
+    final now = DateTime.now();
+    return expenses
+        .where((e) => e.date.month == now.month && e.date.year == now.year)
+        .fold(0.0, (sum, e) => sum + e.amount);
+  }
+
   void initState() {
     super.initState();
     func();
@@ -36,13 +44,23 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final double monthlyTotal = calculateMonthlyTotal(expenses);
     return load
         ? Loading()
         : Scaffold(
-          backgroundColor: Color(0xFFF2ECD8),
+          backgroundColor: col,
           appBar: AppBar(
+            leading: Builder(
+              builder:
+                  (context) => IconButton(
+                    icon: const Icon(Icons.menu, size: 60),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                  ),
+            ),
             toolbarHeight: 150,
-            backgroundColor: Color(0xFFF2ECD8),
+            backgroundColor: col,
             title: Text(
               'TRACK',
               style: TextStyle(
@@ -61,29 +79,126 @@ class _HomeState extends State<Home> {
               ),
             ),
             centerTitle: true,
-            actions: [
-              IconButton(
-                icon: Icon(Icons.power_settings_new_rounded),
-                color: Colors.black,
-                iconSize: 55,
-                onPressed: ()async {
-                  await storage.write(key: 'user', value: '');
-                  setState(() {
-                    user = '';
-                  });
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Authenticate()),
-                  );
-                },
+            // actions: [
+            //   IconButton(
+            //     icon: Icon(Icons.power_settings_new_rounded),
+            //     color: Colors.black,
+            //     iconSize: 55,
+            //     onPressed: () async {
+            //       await storage.write(key: 'user', value: '');
+            //       setState(() {
+            //         user = '';
+            //       });
+            //       Navigator.pushReplacement(
+            //         context,
+            //         MaterialPageRoute(builder: (context) => Authenticate()),
+            //       );
+            //     },
+            //   ),
+            // ],
+          ),
+          drawer: SizedBox(
+            width: 270,
+            child: Drawer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    color: col,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 70),
+                        Icon(Icons.person, size: 120),
+                        Text(
+                          textAlign: TextAlign.center,
+                          user,
+                          style: TextStyle(
+                            fontFamily: 'MyFont',
+                            fontWeight: FontWeight.w900,
+                            color: Colors.black,
+                            fontSize: 35,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(26),
+                    child: Column(
+                      children: [
+                        Text(
+                          textAlign: TextAlign.center,
+                          'Monthly Expense\n₹$monthlyTotal\n',
+                          style: TextStyle(
+                            fontFamily: 'MyFont',
+                            fontWeight: FontWeight.w900,
+                            color: Colors.black,
+                            fontSize: 23,
+                          ),
+                        ),
+                        SizedBox(height:10),
+                        ListTile(
+                          leading: Icon(
+                            Icons.pie_chart_rounded,
+                            color: Colors.grey[800],
+                            size: 35,
+                          ),
+                          title: Text(
+                            'Budget',
+                            style: TextStyle(
+                              fontFamily: 'MyFont',
+                              fontWeight: FontWeight.w900,
+                              color: Colors.black,
+                              fontSize: 27,
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Chart()),
+                            );
+                          },
+                        ),
+                        SizedBox(height:10),
+                        ListTile(
+                          leading: Icon(
+                            Icons.logout_rounded,
+                            color: Colors.grey[800],
+                            size: 35,
+                          ),
+                          title: Text(
+                            'Logout',
+                            style: TextStyle(
+                              fontFamily: 'MyFont',
+                              fontWeight: FontWeight.w900,
+                              color: Colors.black,
+                              fontSize: 27,
+                            ),
+                          ),
+                          onTap: ()async {
+                            await storage.write(key: 'user', value: '');
+                            setState(() {
+                              user = '';
+                            });
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => Authenticate()),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
           body: Stack(
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 70),
-                // give space for the button
                 child: ListView(
                   children:
                       expenses
@@ -92,7 +207,7 @@ class _HomeState extends State<Home> {
                               info: info,
                               onDelete: () async {
                                 setState(() {
-                                  load=true;
+                                  load = true;
                                 });
                                 String? result = await _auth.delete(
                                   info.id!,
@@ -103,22 +218,24 @@ class _HomeState extends State<Home> {
                                     expenses.removeWhere(
                                       (e) => e.id == info.id,
                                     );
-                                    load=false;
+                                    load = false;
                                   });
                                 }
                               },
-                              onEdit: ()async{
+                              onEdit: () async {
                                 setState(() {
-                                  objid=info.id!;
-                                  load=true;
+                                  objid = info.id!;
+                                  load = true;
                                 });
                                 await Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => update(info:info)),
+                                  MaterialPageRoute(
+                                    builder: (context) => update(info: info),
+                                  ),
                                 );
                                 await func();
                                 setState(() {
-                                  load=false;
+                                  load = false;
                                 });
                               },
                             ),
@@ -138,7 +255,7 @@ class _HomeState extends State<Home> {
                       backgroundColor: Colors.black,
                       onPressed: () async {
                         setState(() {
-                          load=true;
+                          load = true;
                         });
                         await Navigator.push(
                           context,
@@ -146,7 +263,7 @@ class _HomeState extends State<Home> {
                         );
                         await func();
                         setState(() {
-                          load=false;
+                          load = false;
                         });
                       },
                       child: Icon(Icons.add, color: Colors.white, size: 50),

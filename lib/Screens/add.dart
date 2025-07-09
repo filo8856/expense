@@ -58,7 +58,7 @@ class _AddState extends State<Add> {
     return load
         ? Loading()
         : Scaffold(
-          backgroundColor: Color(0xFFF2ECD8),
+          backgroundColor: col,
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.black, size: 50),
@@ -67,7 +67,7 @@ class _AddState extends State<Add> {
               },
             ),
             toolbarHeight: 150,
-            backgroundColor: Color(0xFFF2ECD8),
+            backgroundColor: col,
             title: Text(
               'ADD',
               style: TextStyle(

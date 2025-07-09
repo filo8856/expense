@@ -29,10 +29,10 @@ class _SignInState extends State<SignIn> {
     return load
         ? Loading()
         : Scaffold(
-      backgroundColor: Color(0xFFF2ECD8),
+      backgroundColor: col,
       appBar: AppBar(
         toolbarHeight: 150,
-        backgroundColor: Color(0xFFF2ECD8),
+        backgroundColor: col,
         title: Text(
           'LOGIN',
           style: TextStyle(

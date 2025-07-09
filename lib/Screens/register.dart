@@ -28,10 +28,10 @@ class _RegisterState extends State<Register> {
     return load
         ? Loading()
         : Scaffold(
-      backgroundColor: Color(0xFFF2ECD8),
+      backgroundColor: col,
       appBar: AppBar(
         toolbarHeight: 150,
-        backgroundColor: Color(0xFFF2ECD8),
+        backgroundColor: col,
         title: Text(
           'SIGNUP',
           style: TextStyle(

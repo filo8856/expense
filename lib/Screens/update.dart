@@ -71,7 +71,7 @@ class _updateState extends State<update> {
     return load
         ? Loading()
         : Scaffold(
-      backgroundColor: Color(0xFFF2ECD8),
+      backgroundColor: col,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black, size: 50),
@@ -80,7 +80,7 @@ class _updateState extends State<update> {
           },
         ),
         toolbarHeight: 150,
-        backgroundColor: Color(0xFFF2ECD8),
+        backgroundColor: col,
         title: Text(
           'EDIT',
           style: TextStyle(
