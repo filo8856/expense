@@ -4,28 +4,36 @@ import 'package:flutter/material.dart';
 import 'card_class.dart';
 import 'package:intl/intl.dart';
 import 'package:expense1/Screens/expenselist.dart';
+
 class ExpCard extends StatelessWidget {
   final Exp info;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
-  ExpCard({super.key, required this.info,required this.onDelete, required this.onEdit});
+
+  ExpCard({
+    super.key,
+    required this.info,
+    required this.onDelete,
+    required this.onEdit,
+  });
 
   Icon _getCategoryIcon(String category) {
     switch (category.toLowerCase()) {
       case 'food':
-        return Icon(Icons.restaurant,size:50);
+        return Icon(Icons.restaurant, size: 50);
       case 'transport':
-        return Icon(Icons.directions_car,size:50);
+        return Icon(Icons.directions_car, size: 50);
       case 'shopping':
-        return Icon(Icons.shopping_bag,size:50);
+        return Icon(Icons.shopping_bag, size: 50);
       case 'entertainment':
-        return Icon(Icons.movie,size:50);
+        return Icon(Icons.movie, size: 50);
       case 'bills':
-        return Icon(Icons.receipt,size:50);
+        return Icon(Icons.receipt, size: 50);
       default:
-        return Icon(Icons.question_mark,size:50);
+        return Icon(Icons.question_mark, size: 50);
     }
   }
+
   @override
   @override
   Widget build(BuildContext context) {
@@ -48,7 +56,7 @@ class ExpCard extends StatelessWidget {
                   children: [
                     _getCategoryIcon(info.cat ?? ''),
                     Text(
-                      info.cat??'',
+                      info.cat ?? '',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -86,8 +94,6 @@ class ExpCard extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                // Date + Action Buttons
                 Column(
                   children: [
                     Text(
@@ -104,7 +110,7 @@ class ExpCard extends StatelessWidget {
                           icon: Icon(Icons.edit),
                           color: Colors.black,
                           iconSize: 30,
-                          onPressed:onEdit,
+                          onPressed: onEdit,
                         ),
                         IconButton(
                           icon: Icon(Icons.delete),
