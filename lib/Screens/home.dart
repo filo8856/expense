@@ -142,7 +142,26 @@ class _HomeState extends State<Home> {
                     child: Column(
                       children: [
                         SizedBox(height: 70),
-                        Icon(Icons.person, size: 120),
+                        IconButton(
+                          icon: Icon(Icons.person, size: 120,color:Colors.black,),
+                          onPressed: () async {
+                            // if (user == 'satvik') {
+                            //   setState(() {
+                            //     user = '';
+                            //     load = true;
+                            //   });
+                            // } else {
+                            //   setState(() {
+                            //     user = 'satvik';
+                            //     load = true;
+                            //   });
+                            // }
+                            // await func();
+                            // setState(() {
+                            //   load = false;
+                            // });
+                          },
+                        ),
                         Text(
                           textAlign: TextAlign.center,
                           user,
@@ -199,8 +218,9 @@ class _HomeState extends State<Home> {
                         ListTile(
                           leading: Icon(
                             Icons.logout_rounded,
-                            color: Colors.grey[800],
-                            size: 35,
+                            // color: Colors.grey[800],
+                            color: Colors.black,
+                            size: 40,
                           ),
                           title: Text(
                             'Logout',
@@ -208,7 +228,7 @@ class _HomeState extends State<Home> {
                               fontFamily: 'MyFont',
                               fontWeight: FontWeight.w900,
                               color: Colors.black,
-                              fontSize: 27,
+                              fontSize: 30,
                             ),
                           ),
                           onTap: () async {
@@ -477,7 +497,7 @@ class _HomeState extends State<Home> {
                                           await func();
                                           setState(() {
                                             load = false;
-                                            filter=false;
+                                            filter = false;
                                           });
                                         },
                                       ),
@@ -548,7 +568,7 @@ class _HomeState extends State<Home> {
                               );
                               await func();
                               setState(() {
-                                filter=false;
+                                filter = false;
                                 load = false;
                               });
                             },
